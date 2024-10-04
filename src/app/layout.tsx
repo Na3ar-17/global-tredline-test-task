@@ -12,7 +12,9 @@ export default function RootLayout({
 }>) {
 	return (
 		<html data-bs-theme='dark' lang='en'>
-			<body>{children}</body>
+			<body suppressContentEditableWarning suppressHydrationWarning>
+				{children}
+			</body>
 		</html>
 	)
 }
