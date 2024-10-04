@@ -1,0 +1,3 @@
+[X] - create login form 
+[] - implement jwt token 
+[] - create navbar with logout button 
