@@ -17,13 +17,6 @@ export async function GET(req: NextRequest) {
 			.getAll()
 			.filter(el => el.userId === userId)
 
-		if (!topUpRequests.length) {
-			return NextResponse.json(
-				{ message: 'No top-up requests found' },
-				{ status: 404 }
-			)
-		}
-
 		const data = topUpRequests.map(topUpRequest => {
 			const user = Database.users.getById(topUpRequest.userId)
 			const account = Database.accounts.getById(topUpRequest.userId)
