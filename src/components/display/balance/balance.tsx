@@ -10,8 +10,10 @@ export const Balance: NextPage = () => {
 			<ul className='list-group w-100' style={{ marginTop: '50px' }}>
 				{isLoading ? (
 					<div>Loading...</div>
-				) : (
+				) : data && data.length > 0 ? (
 					data?.map((el, i) => <Item data={el} key={i} />)
+				) : (
+					<div>No elements</div>
 				)}
 			</ul>
 		</div>

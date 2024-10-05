@@ -37,6 +37,13 @@ class Database {
 			accountId: 102,
 			userId: 2,
 		},
+		{
+			id: 3,
+			createDate: new Date('2023-01-11T10:00:00Z'),
+			amount: 1200,
+			accountId: 102,
+			userId: 1,
+		},
 	])
 
 	public static accounts: Accounts = new Accounts([
