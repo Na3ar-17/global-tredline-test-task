@@ -12,7 +12,7 @@ class Database {
 			id: 2,
 			createDate: new Date('2023-01-02T10:00:00Z'),
 			email: 'test2@gmail.com',
-			password: 'securepassword',
+			password: '123456',
 		},
 		{
 			id: 3,
