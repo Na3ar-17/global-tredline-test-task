@@ -21,7 +21,7 @@ export async function POST(req: Request) {
 			)
 		}
 
-		if (user.password !== password) {
+		if (password !== user.password) {
 			return NextResponse.json(
 				{ error: 'Invalid email or password' },
 				{

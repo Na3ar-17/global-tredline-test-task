@@ -17,6 +17,9 @@ export const useBalance = () => {
 		}
 		setIsLoading(false)
 	}
+	useEffect(() => {
+		if (data) setData(data)
+	}, [data])
 
 	useEffect(() => {
 		handleGetBalance()

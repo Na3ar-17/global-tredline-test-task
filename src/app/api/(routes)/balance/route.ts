@@ -1,5 +1,6 @@
 import { Database } from '@/models/database'
 import { accessTokenName } from '@/types/auth.types'
+import { decode, JwtPayload } from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
 
 export async function GET(req: NextRequest) {
@@ -7,11 +8,16 @@ export async function GET(req: NextRequest) {
 		const accessToken = req.cookies.get(accessTokenName)?.value
 		if (!accessToken) throw new Error('Unauthorized')
 
+		const decoded = decode(accessToken) as JwtPayload | null
+		if (!decoded || typeof decoded === 'string' || !decoded.id) {
+			throw new Error('Invalid token')
+		}
+		const userId = decoded.id
 		const topUpRequests = Database.topUpRequests.getAll()
 
 		const data = topUpRequests.map(topUpRequest => {
-			const user = Database.users.getById(topUpRequest.userId)
-			const account = Database.accounts.getById(topUpRequest.userId)
+			const user = Database.users.getById(userId)
+			const account = Database.accounts.getById(userId)
 
 			return {
 				createDate: topUpRequest.createDate,

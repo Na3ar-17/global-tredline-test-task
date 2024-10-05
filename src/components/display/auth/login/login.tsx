@@ -11,6 +11,7 @@ export const Login: NextPage = () => {
 		isValid,
 		errors,
 		isSubmitted,
+		values,
 	} = useLogin()
 
 	return (
@@ -26,10 +27,10 @@ export const Login: NextPage = () => {
 				<input
 					type='email'
 					className='form-control bg-transparent'
-					id='email'
 					aria-describedby='emailHelp'
-					name='email'
+					id='email'
 					onChange={handleEmailChange}
+					value={values.email}
 				/>
 				{errors.email && errors.email !== 'empty' && (
 					<p className='text-danger mb-0'>{errors.email}</p>
@@ -42,9 +43,8 @@ export const Login: NextPage = () => {
 				<input
 					type='password'
 					className='form-control bg-transparent'
-					id='password'
-					name='password'
 					onChange={handlePasswordChange}
+					value={values.password}
 				/>
 				{errors.password && errors.password !== 'empty' && (
 					<p className='text-danger mb-0'>{errors.password}</p>
