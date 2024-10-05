@@ -80,7 +80,6 @@ export const useLogin = () => {
 		setIsSubmitted(false)
 		try {
 			if (errors.email || errors.password) return
-			console.log(values)
 
 			const { accessToken } = await authService.login(values)
 
