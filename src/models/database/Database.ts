@@ -6,7 +6,7 @@ class Database {
 			id: 1,
 			createDate: new Date('2023-01-01T10:00:00Z'),
 			email: 'test@gmail.com',
-			password: 'password123',
+			password: '123456',
 		},
 		{
 			id: 2,

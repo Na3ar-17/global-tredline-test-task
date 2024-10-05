@@ -1,26 +1,17 @@
 'use client'
-import { ILoginDto } from '@/types/login.types'
 import { NextPage } from 'next'
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { useLogin } from './useLogin'
 
 export const Login: NextPage = () => {
-	const [data, setData] = useState<ILoginDto>({
-		email: '',
-		password: '',
-	})
-
-	const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault()
-		if (data.email.length && data.password.length) {
-			fetch('api/auth/login', {
-				method: 'POST',
-				body: JSON.stringify(data),
-			})
-				.then(res => res.json())
-				.then(data => console.log(data))
-				.catch(err => console.log(err))
-		}
-	}
+	const {
+		handleEmailChange,
+		handlePasswordChange,
+		isLoading,
+		onSubmit,
+		isValid,
+		errors,
+		isSubmitted,
+	} = useLogin()
 
 	return (
 		<form
@@ -37,16 +28,12 @@ export const Login: NextPage = () => {
 					className='form-control bg-transparent'
 					id='email'
 					aria-describedby='emailHelp'
-					value={data.email}
-					onChange={(e: ChangeEvent<HTMLInputElement>) =>
-						setData(prev => {
-							return {
-								...prev,
-								email: e.target.value,
-							}
-						})
-					}
+					name='email'
+					onChange={handleEmailChange}
 				/>
+				{errors.email && errors.email !== 'empty' && (
+					<p className='text-danger mb-0'>{errors.email}</p>
+				)}
 			</div>
 			<div className='mb-3'>
 				<label htmlFor='password' className='form-label'>
@@ -56,18 +43,18 @@ export const Login: NextPage = () => {
 					type='password'
 					className='form-control bg-transparent'
 					id='password'
-					value={data.password}
-					onChange={(e: ChangeEvent<HTMLInputElement>) =>
-						setData(prev => {
-							return {
-								...prev,
-								password: e.target.value,
-							}
-						})
-					}
+					name='password'
+					onChange={handlePasswordChange}
 				/>
+				{errors.password && errors.password !== 'empty' && (
+					<p className='text-danger mb-0'>{errors.password}</p>
+				)}
 			</div>
-			<button type='submit' className='btn btn-primary'>
+			<button
+				disabled={isLoading || !isValid || isSubmitted}
+				type='submit'
+				className='btn btn-primary'
+			>
 				Submit
 			</button>
 		</form>

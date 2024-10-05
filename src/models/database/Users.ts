@@ -6,8 +6,8 @@ export type UserEntity = {
 }
 
 class Users extends Entity<UserEntity> {
-	public getByUserName(email: string) {
-		this.data.find(row => row.email === email)
+	public getByEmail(email: string) {
+		return this.data.find(row => row.email === email)
 	}
 }
 
