@@ -7,7 +7,7 @@ export const Balance: NextPage = () => {
 	const { data, isLoading } = useBalance()
 
 	return (
-		<div className='container d-flex justify-content-center align-items-center '>
+		<div className='container d-flex flex-column justify-content-center'>
 			<ul className='list-group w-100' style={{ marginTop: '50px' }}>
 				{isLoading ? (
 					<div>Loading...</div>
@@ -18,6 +18,11 @@ export const Balance: NextPage = () => {
 				{/* FIX */}
 				{!isLoading && !data && <div>Something went wrong</div>}
 			</ul>
+			{data && data.length > 0 && (
+				<div className='mt-2'>
+					Total amount: {data.reduce((acc, value) => acc + value.amount, 0)}
+				</div>
+			)}
 		</div>
 	)
 }
