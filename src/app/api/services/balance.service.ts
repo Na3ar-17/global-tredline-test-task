@@ -1,5 +1,10 @@
 import { BASE_URL } from '@/constants'
-import { IBalance, IDeleteBalanceResponse } from '@/types/balance.types'
+import {
+	IBalance,
+	ICreateTopUpRequest,
+	ICreateTopUpRequestResponse,
+	IDeleteBalanceResponse,
+} from '@/types/balance.types'
 
 class BalanceService {
 	private URL = `${BASE_URL}/api/balance`
@@ -30,6 +35,26 @@ class BalanceService {
 					'Content-Type': 'application/json',
 				},
 				body: JSON.stringify({ id }),
+			})
+
+			if (!res.ok) {
+				throw new Error('Failed request')
+			}
+
+			return await res.json()
+		} catch (error) {
+			throw error
+		}
+	}
+
+	async create(dto: ICreateTopUpRequest): Promise<ICreateTopUpRequestResponse> {
+		try {
+			const res = await fetch(this.URL, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(dto),
 			})
 
 			if (!res.ok) {

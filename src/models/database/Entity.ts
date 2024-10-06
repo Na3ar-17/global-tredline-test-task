@@ -15,7 +15,7 @@ abstract class Entity<T> {
 	public add(row: ModifyBaseEntity<T>) {
 		const lastId = this.data[this.data.length - 1].id
 
-		this.data.push({
+		return !!this.data.push({
 			id: lastId + 1,
 			createDate: new Date(),
 			...row,
