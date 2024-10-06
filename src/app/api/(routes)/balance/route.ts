@@ -1,5 +1,6 @@
 import { Database } from '@/models/database'
 import { accessTokenName } from '@/types/auth.types'
+import { IBalance } from '@/types/balance.types'
 import { decode, JwtPayload } from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
 
@@ -26,7 +27,8 @@ export async function GET(req: NextRequest) {
 				email: user?.email,
 				tfAccountId: account?.tfAccountId,
 				amount: topUpRequest.amount,
-			}
+				id: topUpRequest.id,
+			} as IBalance
 		})
 
 		return NextResponse.json(data)
@@ -35,8 +37,14 @@ export async function GET(req: NextRequest) {
 		return NextResponse.json({ message: 'Error' }, { status: 500 })
 	}
 }
-
-export async function POST(req: NextRequest) {
+export async function DELETE(req: NextRequest) {
 	try {
-	} catch (error) {}
+		const data: { id: number } = await req.json()
+		const deleted: boolean = await Database.topUpRequests.remove(data.id)
+
+		return NextResponse.json({ deleted }, { status: deleted ? 200 : 404 })
+	} catch (error) {
+		console.log(error)
+		return NextResponse.json({ message: 'Error' }, { status: 500 })
+	}
 }

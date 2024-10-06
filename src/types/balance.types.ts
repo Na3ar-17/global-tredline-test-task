@@ -4,5 +4,10 @@ import { UserEntity } from '@/models/database/Users'
 export interface IBalance
 	extends Pick<AccountEntity, 'amount' | 'tfAccountId'>,
 		Pick<UserEntity, 'email'> {
-	createDate: string
+	createDate: Date
+	id: number
+}
+
+export interface IDeleteBalanceResponse {
+	deleted: true
 }

@@ -27,9 +27,10 @@ abstract class Entity<T> {
 
 		if (rowToRemove) {
 			this.data = this.data.filter(row => row.id !== id)
+			return true
 		}
 
-		return rowToRemove
+		return false
 	}
 
 	public getAll() {

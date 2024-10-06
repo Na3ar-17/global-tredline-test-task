@@ -1,12 +1,22 @@
+'use client'
+import { balanceService } from '@/app/api/services/balance.service'
 import { IBalance } from '@/types/balance.types'
 import { NextPage } from 'next'
-
 interface IProps {
 	data: IBalance
 }
 
 export const Item: NextPage<IProps> = ({ data }) => {
-	const { amount, createDate, email, tfAccountId } = data
+	const { amount, createDate, email, tfAccountId, id } = data
+	const handleDelete = (id: number) => {
+		balanceService
+			.delete(id)
+			.then(({ deleted }) => {
+				if (deleted) window.location.reload()
+			})
+			.catch(err => console.log(err))
+	}
+
 	return (
 		<li className='list-group-item bg-dark text-white'>
 			<div className='d-flex justify-content-between align-items-center'>
@@ -27,7 +37,12 @@ export const Item: NextPage<IProps> = ({ data }) => {
 						Amount: <span className='text-muted'>${amount}</span>
 					</p>
 				</div>
-				<button className='btn btn-danger btn-sm'>Delete</button>
+				<button
+					onClick={() => handleDelete(id)}
+					className='btn btn-danger btn-sm'
+				>
+					Delete
+				</button>
 			</div>
 		</li>
 	)
