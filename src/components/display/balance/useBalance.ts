@@ -6,23 +6,24 @@ export const useBalance = () => {
 	const [data, setData] = useState<IBalance[] | undefined>(undefined)
 	const [isLoading, setIsLoading] = useState(false)
 
-	const handleGetBalance = async () => {
+	const handleGetTopUpRequests = async () => {
 		setIsLoading(true)
 		try {
 			const data = await balanceService.getAll()
-
-			setData(data)
+			if (data) setData(data)
 		} catch (error) {
 			console.log(error)
+		} finally {
+			setIsLoading(false)
 		}
-		setIsLoading(false)
 	}
+
 	useEffect(() => {
 		if (data) setData(data)
 	}, [data])
 
 	useEffect(() => {
-		handleGetBalance()
+		handleGetTopUpRequests()
 	}, [])
 	return { data, isLoading }
 }

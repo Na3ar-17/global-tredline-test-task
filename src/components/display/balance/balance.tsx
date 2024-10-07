@@ -43,7 +43,6 @@ export const Balance: NextPage = () => {
 						data?.map((el, i) => <Item data={el} key={i} />)
 					)}
 					{!isLoading && data && data.length <= 0 && <div>No elements</div>}
-					{!isLoading && !data && <div>Something went wrong</div>}
 				</ul>
 				{data && data.length > 0 && (
 					<div className='mt-2'>

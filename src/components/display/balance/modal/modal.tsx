@@ -1,6 +1,6 @@
-import { balanceService } from '@/app/api/services/balance.service'
 import { NextPage } from 'next'
-import { ChangeEvent, FormEvent, useState } from 'react'
+import { ChangeEvent } from 'react'
+import { useModal } from './useModal'
 
 interface IProps {
 	isModalVisible: boolean
@@ -13,19 +13,7 @@ export const Modal: NextPage<IProps> = ({
 	isModalVisible,
 	handleCloseModal,
 }) => {
-	const [amount, setAmount] = useState<string>('')
-	const onSubmit = (e: FormEvent<HTMLFormElement>) => {
-		e.preventDefault()
-		if (!Number(amount)) return
-
-		balanceService.create({ amount: +amount }).then(({ created }) => {
-			if (created) {
-				handleCloseModal()
-				window.location.reload()
-			}
-		})
-	}
-
+	const { onSubmit, setAmount, amount } = useModal(handleCloseModal)
 	return (
 		<div>
 			<div
@@ -51,6 +39,8 @@ export const Modal: NextPage<IProps> = ({
 									type='number'
 									id='amount'
 									className='form-control'
+									max={999999}
+									required
 								/>
 							</div>
 						</div>

@@ -9,7 +9,7 @@ export interface IBalance
 	id: number
 }
 
-export interface IDeleteBalanceResponse {
+export interface IDeleteTopUpRequest {
 	deleted: true
 }
 export interface ICreateTopUpRequest extends Pick<TopUpEntity, 'amount'> {}

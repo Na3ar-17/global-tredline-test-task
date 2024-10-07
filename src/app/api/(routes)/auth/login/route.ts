@@ -1,3 +1,4 @@
+import { JWT_SECRET } from '@/constants'
 import { Database } from '@/models/database'
 import { ILoginDto } from '@/types/login.types'
 import { sign } from 'jsonwebtoken'
@@ -30,13 +31,9 @@ export async function POST(req: Request) {
 			)
 		}
 
-		const accessToken = sign(
-			{ id: user.id, email: user.email },
-			process.env.NEXT_PUBLIC_JWT_SECRET || 'secret',
-			{
-				expiresIn: '1h',
-			}
-		)
+		const accessToken = sign({ id: user.id }, JWT_SECRET, {
+			expiresIn: '1h',
+		})
 
 		return NextResponse.json({ email: user.email, accessToken })
 	} catch (error) {

@@ -1,19 +1,11 @@
 import { Database } from '@/models/database'
-import { accessTokenName } from '@/types/auth.types'
 import { IBalance, ICreateTopUpRequest } from '@/types/balance.types'
-import { decode, JwtPayload } from 'jsonwebtoken'
 import { NextRequest, NextResponse } from 'next/server'
+import { getUserIdByAccessToken } from '../../actions'
 
 export async function GET(req: NextRequest) {
 	try {
-		const accessToken = req.cookies.get(accessTokenName)?.value
-		if (!accessToken) throw new Error('Unauthorized')
-
-		const decoded = decode(accessToken) as JwtPayload | null
-		if (!decoded || typeof decoded === 'string' || !decoded.id) {
-			throw new Error('Invalid token')
-		}
-		const userId = decoded.id
+		const { userId } = getUserIdByAccessToken(req)
 		const topUpRequests = Database.topUpRequests
 			.getAll()
 			.filter(el => el.userId === userId)
@@ -51,14 +43,7 @@ export async function DELETE(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
 	try {
-		const accessToken = req.cookies.get(accessTokenName)?.value
-		if (!accessToken) throw new Error('Unauthorized')
-
-		const decoded = decode(accessToken) as JwtPayload | null
-		if (!decoded || typeof decoded === 'string' || !decoded.id) {
-			throw new Error('Invalid token')
-		}
-		const userId = decoded.id
+		const { userId } = getUserIdByAccessToken(req)
 		const data: ICreateTopUpRequest = await req.json()
 		const accounts = await Database.accounts.getAll()
 		const userAccount = accounts.find(el => el.userId == userId)

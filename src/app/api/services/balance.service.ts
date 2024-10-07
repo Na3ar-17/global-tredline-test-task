@@ -3,9 +3,8 @@ import {
 	IBalance,
 	ICreateTopUpRequest,
 	ICreateTopUpRequestResponse,
-	IDeleteBalanceResponse,
+	IDeleteTopUpRequest,
 } from '@/types/balance.types'
-
 class BalanceService {
 	private URL = `${BASE_URL}/api/balance`
 
@@ -27,7 +26,7 @@ class BalanceService {
 			throw error
 		}
 	}
-	async delete(id: number): Promise<IDeleteBalanceResponse> {
+	async delete(id: number): Promise<IDeleteTopUpRequest> {
 		try {
 			const res = await fetch(this.URL, {
 				method: 'DELETE',

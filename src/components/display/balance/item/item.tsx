@@ -2,21 +2,21 @@
 import { balanceService } from '@/app/api/services/balance.service'
 import { IBalance } from '@/types/balance.types'
 import { NextPage } from 'next'
+
 interface IProps {
 	data: IBalance
 }
 
 export const Item: NextPage<IProps> = ({ data }) => {
 	const { amount, createDate, email, tfAccountId, id } = data
-	const handleDelete = (id: number) => {
-		balanceService
-			.delete(id)
-			.then(({ deleted }) => {
-				if (deleted) window.location.reload()
-			})
-			.catch(err => console.log(err))
+	const handleDelete = async (id: number) => {
+		try {
+			const { deleted } = await balanceService.delete(id)
+			if (deleted) window.location.reload()
+		} catch (error) {
+			throw error
+		}
 	}
-
 	return (
 		<li className='list-group-item bg-dark text-white'>
 			<div className='d-flex justify-content-between align-items-center'>

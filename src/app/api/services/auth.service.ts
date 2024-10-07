@@ -1,5 +1,6 @@
 import { BASE_URL } from '@/constants'
 import { ILoginDto, ILoginResponse } from '@/types/login.types'
+
 class AuthService {
 	private URL = `${BASE_URL}/api/auth`
 

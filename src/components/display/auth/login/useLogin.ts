@@ -7,92 +7,65 @@ import { ChangeEvent, FormEvent, useState } from 'react'
 
 export const useLogin = () => {
 	const { replace } = useRouter()
-	const [values, setValues] = useState<ILoginDto>({
-		email: '',
-		password: '',
-	})
+	const [values, setValues] = useState<ILoginDto>({ email: '', password: '' })
 	const [errors, setErrors] = useState<ILoginDto>({
 		email: 'empty',
 		password: 'empty',
 	})
 	const [isLoading, setIsLoading] = useState<boolean>(false)
 	const [isSubmitted, setIsSubmitted] = useState<boolean>(false)
-
 	const isValid = !errors.email && !errors.password
 
+	const handleChange = (
+		field: keyof ILoginDto,
+		value: string,
+		validator: (value: string) => string
+	) => {
+		setValues(prev => ({ ...prev, [field]: value }))
+		setErrors(prev => ({ ...prev, [field]: validator(value) }))
+	}
+
 	const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
-		validateEmail(e.target.value)
-		setValues(prev => ({
-			...prev,
-			email: e.target.value,
-		}))
+		handleChange('email', e.target.value, validateEmail)
 	}
 
 	const handlePasswordChange = (e: ChangeEvent<HTMLInputElement>) => {
-		validatePassword(e.target.value)
-		setValues(prev => ({
-			...prev,
-			password: e.target.value,
-		}))
+		handleChange('password', e.target.value, validatePassword)
 	}
 
-	const validateEmail = (email: string) => {
-		if (!email.trim().length) {
-			setErrors(prev => ({
-				...prev,
-				email: 'This is a required field',
-			}))
-		} else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
-			setErrors(prev => ({
-				...prev,
-				email: 'Invalid email',
-			}))
-		} else {
-			setErrors(prev => ({
-				...prev,
-				email: '',
-			}))
-		}
+	const validateEmail = (email: string): string => {
+		if (!email.trim()) return 'This is a required field'
+		if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email))
+			return 'Invalid email'
+		if (email.length > 30) return 'Too long'
+		return ''
 	}
 
-	const validatePassword = (password: string) => {
-		if (!password.trim().length) {
-			setErrors(prev => ({
-				...prev,
-				password: 'This is a required field',
-			}))
-		} else if (password.trim().length < 6) {
-			setErrors(prev => ({
-				...prev,
-				password: 'At least 6 characters',
-			}))
-		} else {
-			setErrors(prev => ({
-				...prev,
-				password: '',
-			}))
-		}
+	const validatePassword = (password: string): string => {
+		if (!password.trim()) return 'This is a required field'
+		if (password.length < 6) return 'At least 6 characters'
+		if (password.length > 20) return 'Too long'
+		return ''
 	}
 
 	const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
+		if (!isValid) return
 		setIsLoading(true)
 		setIsSubmitted(false)
 		try {
-			if (errors.email || errors.password) return
-
 			const { accessToken } = await authService.login(values)
-
 			if (accessToken) {
+				cookie.set(accessTokenName, accessToken, { sameSite: 'lax' })
 				setIsSubmitted(true)
 				replace('/balance')
-				cookie.set(accessTokenName, accessToken)
 			}
 		} catch (error) {
-			console.log(error)
+			throw error
+		} finally {
+			setIsLoading(false)
+			setValues({ email: '', password: '' })
 		}
-		setIsLoading(false)
-		setValues({ email: '', password: '' })
 	}
 
 	return {
