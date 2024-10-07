@@ -2,9 +2,9 @@ import { accessTokenName } from '@/types/auth.types'
 import { decode, JwtPayload } from 'jsonwebtoken'
 import { NextRequest } from 'next/server'
 
-export const getUserIdByAccessToken = (req: NextRequest) => {
+export const getUserIdByAccessToken = async (req: NextRequest) => {
 	'use server'
-	const accessToken = req.cookies.get(accessTokenName)?.value
+	const accessToken = await req.cookies.get(accessTokenName)?.value
 	if (!accessToken) throw new Error('Unauthorized')
 
 	const decoded = decode(accessToken) as JwtPayload | null
