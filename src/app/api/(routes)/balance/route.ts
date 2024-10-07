@@ -5,7 +5,7 @@ import { getUserIdByAccessToken } from '../../actions'
 
 export async function GET(req: NextRequest) {
 	try {
-		const { userId } = getUserIdByAccessToken(req)
+		const { userId } = await getUserIdByAccessToken(req)
 		const topUpRequests = Database.topUpRequests
 			.getAll()
 			.filter(el => el.userId === userId)
@@ -43,7 +43,7 @@ export async function DELETE(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
 	try {
-		const { userId } = getUserIdByAccessToken(req)
+		const { userId } = await getUserIdByAccessToken(req)
 		const data: ICreateTopUpRequest = await req.json()
 		const accounts = await Database.accounts.getAll()
 		const userAccount = accounts.find(el => el.userId == userId)
